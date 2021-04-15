@@ -1,0 +1,27 @@
+[package]
+name = "rock"
+version = "0.1.2"
+authors = ["tjyang2001@gmail.com"]
+description = "Commands to fetch upstream pkgs for Rocky Linux"
+license     = "Apache-2.0"
+homepage    = "https://github.com/rustrpm/cargo-rpm/"
+readme      = "README.md"
+categories  = ["command-line-utilities" ]
+keywords    = ["linux", "Rocky Linux", "package" ]
+exclude     = ["*.yml","*.dot"]
+
+
+
+[dependencies]
+rexpect = "0.3"
+#os_info = "1.1.1"
+clap = "2.33.0"
+oping = "0.3.3"
+
+[package.metadata.rpm.cargo]
+buildflags = ["--release"]
+
+[package.metadata.rpm.targets]
+cargo-rpm = { path = "/usr/bin/cargo-rpm:~/.cargo/bin/cargo-rpm" }
+
+
