@@ -40,10 +40,6 @@ clean: cleantmp
 clean_hard:
 	-rm -rf $(shell $(PYTHON) -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")/adagios 
 
-
-clean_hardest: clean_rpms
-
-
 #Ref: https://stackoverflow.com/questions/1490949/how-to-write-loop-in-a-makefile
 # MANIFEST  
 SRC1= Makefile 
@@ -52,6 +48,7 @@ SRC2=
 
 cleantmp:
 	rm -f ${A2PSTMP}/*.ps ${A2PSTMP}/*.pdf	
+
 .ps: cleantmp
 	$(foreach var, $(SRC1), ${A2PS2S1C} $(var) --output=${A2PSTMP}/$(var).ps ;)
 	$(foreach var, $(SRC2), ${A2PS2S1C} $(var) --output=${A2PSTMP}/$(var).ps ;)
@@ -90,7 +87,8 @@ help:
 	@echo "Usage: make <target> <argument>"
 	@echo
 	@echo "Available targets are:"
-	@echo "  all                    Default without argument"
+	@echo "  all                    Default to help"
+	@echo "  test                   rock test run"
 	@echo "  help                   Showing this help "
 	@echo "  install                Install devtool"
 	@echo "  build  rpm-name        Ex: make build perl "
