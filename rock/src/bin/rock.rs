@@ -61,31 +61,31 @@ fn build(domain: &str) -> Result<()> {
 }
 
 
-fn get(domain: &str) -> Result<()> {
-    //! TBC
+fn get(name: &str) -> Result<()> {
+    //! What: rockyget rpm1
     //!
-    let ldomain: &str = domain;
-    let cmd_prefix = "/usr/sbin/realm discover ";
+    let lname: &str = name;
+    let cmd_prefix = "/usr/local/bin/srpmproc";
     let realm_suffix = "";
 
-    let discover_command = [cmd_prefix, realm_suffix].join(ldomain);
-    // println!("discover_command:{N}", N = discover_command);
-    let mut p = spawn(&discover_command, Some(30_000))?;
+    let get_command = [cmd_prefix, realm_suffix].join(lname);
+    // println!("get_command:{N}", N = get_command);
+    let mut p = spawn(&get_command, Some(30_000))?;
     match p.process.wait() {
         Ok(wait::WaitStatus::Exited(_, 0)) => {
-            println!("{a1} exited with code 0, all good!", a1 = discover_command)
+            println!("{a1} exited with code 0, all good!", a1 = get_command)
         }
         Ok(wait::WaitStatus::Exited(_, c)) => {
             println!(
                 "Command: {a1} exited with code {c1}.",
-                a1 = discover_command,
+                a1 = get_command,
                 c1 = c
             );
             println!("Output (stdout and stderr): {}", p.exp_eof()?);
         }
         _ => println!(
             "{a1} exited with code >0, or it was killed.",
-            a1 = discover_command
+            a1 = get_command
         ),
     }
     p.exp_eof()?;

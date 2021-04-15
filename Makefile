@@ -71,6 +71,25 @@ tree: clean
 test:
 	(cd rock && cargo build && sudo target/debug/rock -h)
 
+.go-setup:
+	go get gopkg.in/yaml.v2
+	touch .go-setup
+
+srpmproc:
+	git clone https://git.rockylinux.org/release-engineering/public/srpmproc.git
+
+srpmproc/srpmproc: srpmproc
+	cd srpmproc; CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build ./cmd/srpmproc
+
+install_srpmproc: srpmproc/srpmproc .dnf .system
+	sudo cp -r etc_mock/rocky* /etc/mock/
+	sudo cp -r etc_mock/templates/* /etc/mock/templates/
+	sudo install -m 755 srpmproc/srpmproc /usr/local/bin/
+	sudo install -m 755 bin/* /usr/local/bin/
+	test -d /usr/share/nginx/html/repo || mkdir /usr/share/nginx/html/repo
+	sudo chmod 777 /usr/share/nginx/html/repo
+
+
 # enable makefile to accept argument after command
 #https://stackoverflow.com/questions/6273608/how-to-pass-argument-to-makefile-from-command-line
 
@@ -91,6 +110,7 @@ help:
 	@echo "  test                   rock test run by cargo"
 	@echo "  help                   Showing this help "
 	@echo "  install                Install rock binary locally"
+	@echo "  install_srpmproc       Install srpmproc Go binary locally"
 	@echo "  get rpm1               rock get rpm1"
 	@echo "  build rpm1             rock build rpm1"
 	@echo "  mkcfg rpm1             rock mkcfg rpm1"

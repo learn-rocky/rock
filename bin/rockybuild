@@ -1,0 +1,63 @@
+#!/bin/sh
+
+ARCH=`uname -m`
+NAME="$1"
+BRANCH="$2"
+MODULE="$3"
+
+if [ -z "$NAME" ]; then
+    echo "USAGE: $0 [PACKAGE NAME] [BRANCH]"
+    exit 1
+else
+    shift
+fi
+
+if [ -z "$BRANCH" ]; then
+    BRANCH="r8"
+else
+    shift
+fi
+
+
+if [ -z "$MODULE" ]; then
+    MOCKCONFIG="/etc/mock/rocky.$ARCH/baseos.cfg"
+else
+    if [ -f "/etc/mock/rocky.$ARCH/modules/$MODULE.cfg" ]; then
+        MOCKCONFIG="/etc/mock/rocky.$ARCH/modules/$MODULE.cfg"
+        shift
+    else
+        echo "ERROR: Could not find module config for: '$MODULE'"
+        exit 255
+    fi
+fi
+
+if [ ! -d "${HOME}/rocky/rpms/${NAME}" ]; then
+    echo "Importing package: ${NAME}"
+    if ! rockyget "${NAME}"; then
+        echo "Failed to import package: ${NAME}"
+        exit 255
+    fi
+fi
+
+if [ ! -d "${HOME}/rocky/rpms/${NAME}/${BRANCH}" ]; then
+    echo "This package branch does not exist."
+    exit 255
+fi
+    
+test -d "${HOME}/rocky/builds/${NAME}/${BRANCH}" || mkdir -p "${HOME}/rocky/builds/${NAME}/${BRANCH}"
+
+set -e
+
+createrepo /usr/share/nginx/html/repo
+
+
+#cd "${HOME}/rocky/rpms/${NAME}/${BRANCH}"
+
+rpmbuild -bs --nodeps --define "%_topdir ${HOME}/rocky/rpms/${NAME}/${BRANCH}" --define "dist .el8" "${HOME}/rocky/rpms/${NAME}/${BRANCH}/SPECS/${NAME}.spec"
+
+mock -r "$MOCKCONFIG" --resultdir="${HOME}/rocky/builds/${NAME}/${BRANCH}" ${HOME}/rocky/rpms/${NAME}/${BRANCH}/SRPMS/${NAME}*.src.rpm --cleanup-after ${MOCKARGS:-}
+
+cp ${HOME}/rocky/builds/${NAME}/${BRANCH}/*.rpm ${HOME}/rocky/rpms/${NAME}/${BRANCH}/SRPMS/*.src.rpm /usr/share/nginx/html/repo/
+
+createrepo /usr/share/nginx/html/repo
+
