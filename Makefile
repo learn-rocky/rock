@@ -88,14 +88,17 @@ help:
 	@echo
 	@echo "Available targets are:"
 	@echo "  all                    Default to help"
-	@echo "  test                   rock test run"
+	@echo "  test                   rock test run by cargo"
 	@echo "  help                   Showing this help "
-	@echo "  install                Install devtool"
-	@echo "  build  rpm-name        Ex: make build perl "
+	@echo "  install                Install rock binary locally"
+	@echo "  get rpm1               rock get rpm1"
+	@echo "  build rpm1             rock build rpm1"
+	@echo "  prep rpm1              rock prep  rpm1"
+	@echo "  patch rpm1             rock patch rpm1"
 	@echo "  clean                  clean myrocky and srpmproc "
-	@echo "  commit {"my message"}  ie, git commit, without or with real commit message"
-	@echo "  status                 ie, git status"
-	@echo "  pull                   ie, git pull"
+	@echo "  commit {"my message"}  git commit, without or with real commit message"
+	@echo "  status                 git status"
+	@echo "  pull                   git pull"
 	@echo ""
 
 
