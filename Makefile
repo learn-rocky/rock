@@ -93,6 +93,7 @@ help:
 	@echo "  install                Install rock binary locally"
 	@echo "  get rpm1               rock get rpm1"
 	@echo "  build rpm1             rock build rpm1"
+	@echo "  mkcfg rpm1             rock mkcfg rpm1"
 	@echo "  prep rpm1              rock prep  rpm1"
 	@echo "  patch rpm1             rock patch rpm1"
 	@echo "  clean                  clean myrocky and srpmproc "
