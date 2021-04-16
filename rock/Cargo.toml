@@ -2,12 +2,12 @@
 name = "rock"
 version = "0.1.2"
 authors = ["tjyang2001@gmail.com"]
-description = "Commands to fetch upstream pkgs for Rocky Linux"
+description = "Commands in Rust to get and build upstream pkgs for Rocky Linux"
 license     = "Apache-2.0"
 homepage    = "https://github.com/rustrpm/cargo-rpm/"
 readme      = "README.md"
 categories  = ["command-line-utilities" ]
-keywords    = ["linux", "Rocky Linux", "package" ]
+keywords    = ["linux", "Rocky Linux", "package","Rust" ]
 exclude     = ["*.yml","*.dot"]
 
 
